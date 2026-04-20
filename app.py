@@ -439,19 +439,31 @@ def payment(vehicle_id):
 
         # Publish SNS notification
         try:
-            sns_message = {
-                'booking_id': booking_id,
-                'username': session['username'],
-                'vehicle': f"{vehicle['brand']} {vehicle['model']}",
-                'vehicle_type': vehicle['vehicle_type'],
-                'dates': f"{start_date} to {end_date}",
-                'amount': str(total_amount),
-                'status': 'Payment Completed',
-            }
+            sns_message = (
+                f"Dear Admin,\n\n"
+                f"A new vehicle booking has been confirmed on RentWheels. "
+                f"Please find the details below.\n\n"
+                f"{'=' * 45}\n"
+                f"  BOOKING CONFIRMATION\n"
+                f"{'=' * 45}\n\n"
+                f"  Booking ID    : {booking_id}\n"
+                f"  Customer      : {session['username']}\n\n"
+                f"  Vehicle       : {vehicle['brand']} {vehicle['model']}\n"
+                f"  Type          : {vehicle['vehicle_type']}\n"
+                f"  Category      : {vehicle['category']}\n\n"
+                f"  Rental Period : {start_date}  to  {end_date}\n"
+                f"  Total Amount  : Rs. {total_amount}\n"
+                f"  Payment Status: Completed\n\n"
+                f"{'=' * 45}\n\n"
+                f"This is an automated notification from RentWheels.\n"
+                f"Please log in to the Admin Dashboard for full details.\n\n"
+                f"Regards,\n"
+                f"RentWheels System\n"
+            )
             sns_client.publish(
                 TopicArn=sns_topic_arn,
                 Subject='New Vehicle Booking - RentWheels',
-                Message=json.dumps(sns_message, indent=2),
+                Message=sns_message,
             )
             print(f"  [OK] SNS notification sent for booking {booking_id}")
         except ClientError as e:

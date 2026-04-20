@@ -329,6 +329,13 @@ select.form-control {
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding-right: 2.5rem;
+  background-color: #111427;
+}
+
+select.form-control option {
+  background-color: #111427;
+  color: #eaeeff;
+  padding: 0.5rem;
 }
 
 .form-row {
