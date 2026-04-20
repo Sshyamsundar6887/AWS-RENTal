@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Browse Vehicles — RentWheels{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <h1 class="page-title fade-in-up">Browse Vehicles</h1>
+  <p class="page-subtitle fade-in-up fade-in-up-delay-1">Find your perfect ride. Select dates and book instantly.</p>
+
+  <!-- ===== Filters ===== -->
+  <div class="filter-bar fade-in-up fade-in-up-delay-2">
+    <button class="filter-btn active" data-filter="all" onclick="filterVehicles('all', this)">All</button>
+    <button class="filter-btn" data-filter="2-Wheeler" onclick="filterVehicles('2-Wheeler', this)">🏍️ 2-Wheeler</button>
+    <button class="filter-btn" data-filter="4-Wheeler" onclick="filterVehicles('4-Wheeler', this)">🚗 4-Wheeler</button>
+  </div>
+
+  <!-- ===== Vehicle Grid ===== -->
+  {% if vehicles %}
+    <div class="vehicles-grid" id="vehicles-grid">
+      {% for v in vehicles %}
+        <div class="vehicle-card fade-in-up" data-type="{{ v.vehicle_type }}">
+          {% if v.image_url %}
+            <img src="{{ v.image_url }}" alt="{{ v.brand }} {{ v.model }}" class="vehicle-card-img" />
+          {% else %}
+            <div class="vehicle-card-img" style="background:linear-gradient(135deg,#1a1a3e,#2d2b70);display:flex;align-items:center;justify-content:center;font-size:3rem;">
+              {% if v.vehicle_type == '2-Wheeler' %}🏍️{% else %}🚗{% endif %}
+            </div>
+          {% endif %}
+          <div class="vehicle-card-body">
+            <span class="badge {{ 'badge-2w' if v.vehicle_type == '2-Wheeler' else 'badge-4w' }}" style="margin-bottom:0.5rem;">
+              {{ v.vehicle_type }} · {{ v.category }}
+            </span>
+            <h3>{{ v.brand }} {{ v.model }}</h3>
+            <p class="vehicle-meta">{{ v.category }} · {{ v.vehicle_type }}</p>
+            <div class="vehicle-price">₹{{ v.price_per_day }} <span>/ day</span></div>
+
+            <form method="GET" action="{{ url_for('payment', vehicle_id=v.vehicle_id) }}">
+              <div class="date-row">
+                <input type="date" name="start_date" class="form-control" required title="Start date" />
+                <input type="date" name="end_date" class="form-control" required title="End date" />
+              </div>
+              <button type="submit" class="btn btn-primary btn-full btn-sm">Book Now</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state glass-card no-hover">
+      <div class="empty-icon">🔍</div>
+      <p>No vehicles available at the moment. Check back later!</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Set min date to today for all date inputs
+  const today = new Date().toISOString().split('T')[0];
+  document.querySelectorAll('input[type="date"]').forEach(input => {
+    input.setAttribute('min', today);
+  });
+
+  function filterVehicles(type, btn) {
+    // Update active button
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Filter cards
+    document.querySelectorAll('.vehicle-card').forEach(card => {
+      if (type === 'all' || card.dataset.type === type) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+{% endblock %}

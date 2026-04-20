@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Payment — RentWheels{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <h1 class="page-title fade-in-up">Checkout</h1>
+  <p class="page-subtitle fade-in-up fade-in-up-delay-1">Review your booking and complete payment.</p>
+
+  <div class="payment-wrapper fade-in-up fade-in-up-delay-2">
+
+    <!-- ===== Booking Summary ===== -->
+    <div class="glass-card no-hover payment-summary">
+      <h3>📋 Booking Summary</h3>
+
+      <div class="summary-row">
+        <span class="label">Vehicle</span>
+        <span class="value">{{ vehicle.brand }} {{ vehicle.model }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">Type</span>
+        <span class="value">{{ vehicle.vehicle_type }} · {{ vehicle.category }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">Start Date</span>
+        <span class="value">{{ start_date }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">End Date</span>
+        <span class="value">{{ end_date }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">Duration</span>
+        <span class="value">{{ num_days }} day{{ 's' if num_days != 1 }}</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">Rate</span>
+        <span class="value">₹{{ vehicle.price_per_day }} / day</span>
+      </div>
+      <div class="summary-row summary-total">
+        <span class="label">Total Amount</span>
+        <span class="value">₹{{ total_amount }}</span>
+      </div>
+    </div>
+
+    <!-- ===== Mock Payment Form ===== -->
+    <div class="glass-card no-hover">
+      <h3 style="margin-bottom:1.2rem;">💳 Payment Details</h3>
+
+      <!-- Card Visual -->
+      <div class="card-visual" id="card-visual">
+        <div class="card-chip"></div>
+        <div class="card-number-display" id="card-display">•••• •••• •••• ••••</div>
+        <div class="card-bottom">
+          <span id="card-name-display">YOUR NAME</span>
+          <span id="card-expiry-display">MM/YY</span>
+        </div>
+      </div>
+
+      <form method="POST" action="{{ url_for('payment', vehicle_id=vehicle.vehicle_id) }}">
+        <input type="hidden" name="start_date" value="{{ start_date }}" />
+        <input type="hidden" name="end_date" value="{{ end_date }}" />
+        <input type="hidden" name="total_amount" value="{{ total_amount }}" />
+
+        <div class="form-group">
+          <label for="card_name">Cardholder Name</label>
+          <input type="text" id="card_name" name="card_name" class="form-control" placeholder="Name on card" required />
+        </div>
+
+        <div class="form-group">
+          <label for="card_number">Card Number</label>
+          <input type="text" id="card_number" name="card_number" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="expiry">Expiry Date</label>
+            <input type="text" id="expiry" name="expiry" class="form-control" placeholder="MM/YY" maxlength="5" required />
+          </div>
+          <div class="form-group">
+            <label for="cvv">CVV</label>
+            <input type="password" id="cvv" name="cvv" class="form-control" placeholder="•••" maxlength="4" required />
+          </div>
+        </div>
+
+        <button type="submit" id="pay-btn" class="btn btn-primary btn-full">
+          Pay ₹{{ total_amount }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Live card preview
+  const cardDisplay = document.getElementById('card-display');
+  const nameDisplay = document.getElementById('card-name-display');
+  const expiryDisplay = document.getElementById('card-expiry-display');
+
+  document.getElementById('card_number').addEventListener('input', function(e) {
+    let val = this.value.replace(/\D/g, '');
+    val = val.match(/.{1,4}/g)?.join(' ') || '';
+    this.value = val;
+    cardDisplay.textContent = val || '•••• •••• •••• ••••';
+  });
+
+  document.getElementById('card_name').addEventListener('input', function() {
+    nameDisplay.textContent = this.value.toUpperCase() || 'YOUR NAME';
+  });
+
+  document.getElementById('expiry').addEventListener('input', function() {
+    let val = this.value.replace(/\D/g, '');
+    if (val.length >= 2) val = val.slice(0, 2) + '/' + val.slice(2);
+    this.value = val;
+    expiryDisplay.textContent = val || 'MM/YY';
+  });
+</script>
+{% endblock %}

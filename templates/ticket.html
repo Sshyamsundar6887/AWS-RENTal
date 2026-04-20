@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Booking Confirmed — RentWheels{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <div class="ticket-wrapper fade-in-up">
+    <div class="glass-card ticket-card no-hover">
+
+      <!-- Header -->
+      <div class="ticket-header">
+        <div class="success-icon">✅</div>
+        <h2>Booking Confirmed!</h2>
+        <p>Your vehicle has been booked successfully.</p>
+      </div>
+
+      <!-- Details Grid -->
+      <div class="ticket-details">
+        <div class="ticket-field">
+          <div class="field-label">Booking ID</div>
+          <div class="field-value" style="font-family:'Courier New',monospace;font-size:0.88rem;">{{ booking.booking_id }}</div>
+        </div>
+        <div class="ticket-field">
+          <div class="field-label">Booked By</div>
+          <div class="field-value">{{ booking.username }}</div>
+        </div>
+        <div class="ticket-field">
+          <div class="field-label">Vehicle</div>
+          <div class="field-value">{{ vehicle.brand }} {{ vehicle.model }}</div>
+        </div>
+        <div class="ticket-field">
+          <div class="field-label">Type / Category</div>
+          <div class="field-value">{{ vehicle.vehicle_type }} · {{ vehicle.category }}</div>
+        </div>
+        <div class="ticket-field">
+          <div class="field-label">Start Date</div>
+          <div class="field-value">{{ booking.start_date }}</div>
+        </div>
+        <div class="ticket-field">
+          <div class="field-label">End Date</div>
+          <div class="field-value">{{ booking.end_date }}</div>
+        </div>
+        <div class="ticket-field">
+          <div class="field-label">Booked On</div>
+          <div class="field-value">{{ booking.booked_at }}</div>
+        </div>
+        <div class="ticket-field">
+          <div class="field-label">Payment Status</div>
+          <div class="field-value" style="color:var(--accent-success);font-weight:600;">{{ booking.payment_status | upper }}</div>
+        </div>
+
+        <!-- Total -->
+        <div class="ticket-total">
+          <div class="field-label" style="margin-bottom:0.3rem;">Total Paid</div>
+          <div class="amount">₹{{ booking.total_amount }}</div>
+          <div class="status-badge">Payment Complete</div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="ticket-actions">
+        <button onclick="window.print()" class="btn btn-outline btn-sm">🖨️ Print Ticket</button>
+        <a href="{{ url_for('user_dashboard') }}" class="btn btn-primary btn-sm">Browse More</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

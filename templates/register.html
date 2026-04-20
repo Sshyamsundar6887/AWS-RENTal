@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Register — RentWheels{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="glass-card auth-card no-hover fade-in-up">
+    <div class="auth-logo">🚀</div>
+    <h2>Create Account</h2>
+    <p class="auth-sub">Join RentWheels and start booking today</p>
+
+    <form method="POST" action="{{ url_for('register') }}" id="register-form">
+      <div class="form-group">
+        <label for="full_name">Full Name</label>
+        <input type="text" id="full_name" name="full_name" class="form-control" placeholder="John Doe" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="john@example.com" required />
+      </div>
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Choose a username" required />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Min 6 characters" required minlength="6" />
+        </div>
+        <div class="form-group">
+          <label for="confirm_password">Confirm Password</label>
+          <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Re-enter password" required />
+        </div>
+      </div>
+
+      <button type="submit" id="register-btn" class="btn btn-primary btn-full">Create Account</button>
+    </form>
+
+    <p class="link-text mt-2">
+      Already have an account? <a href="{{ url_for('login') }}">Sign in</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.getElementById('register-form').addEventListener('submit', function(e) {
+    const pw = document.getElementById('password').value;
+    const cpw = document.getElementById('confirm_password').value;
+    if (pw !== cpw) {
+      e.preventDefault();
+      alert('Passwords do not match!');
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="RentWheels — Premium vehicle rental platform. Browse, book, and ride." />
+  <title>{% block title %}RentWheels{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <!-- ===== Navbar ===== -->
+  <nav class="navbar">
+    <a href="/" class="navbar-brand">
+      <span class="brand-icon">🚗</span>
+      RentWheels
+    </a>
+    <ul class="navbar-links">
+      {% if session.get('username') %}
+        {% if session.get('role') == 'admin' %}
+          <li><a href="{{ url_for('admin_dashboard') }}" class="{% if request.endpoint == 'admin_dashboard' %}active{% endif %}">📊 Dashboard</a></li>
+        {% else %}
+          <li><a href="{{ url_for('user_dashboard') }}" class="{% if request.endpoint == 'user_dashboard' %}active{% endif %}">🏍️ Vehicles</a></li>
+        {% endif %}
+        <li><a href="{{ url_for('logout') }}" class="btn-logout">Logout</a></li>
+      {% else %}
+        <li><a href="{{ url_for('login') }}" class="{% if request.endpoint == 'login' %}active{% endif %}">Login</a></li>
+        <li><a href="{{ url_for('register') }}" class="btn-outline btn-sm">Register</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <!-- ===== Flash Messages ===== -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash-message {{ category }}">
+            {% if category == 'success' %}✅{% elif category == 'error' %}❌{% else %}ℹ️{% endif %}
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- ===== Page Content ===== -->
+  {% block content %}{% endblock %}
+
+  <!-- ===== Page Scripts ===== -->
+  {% block scripts %}{% endblock %}
+
+</body>
+</html>

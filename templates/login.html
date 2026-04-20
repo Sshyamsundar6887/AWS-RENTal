@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Login — RentWheels{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="glass-card auth-card no-hover fade-in-up">
+    <div class="auth-logo">🔐</div>
+    <h2>Welcome Back</h2>
+    <p class="auth-sub">Sign in to your RentWheels account</p>
+
+    <form method="POST" action="{{ url_for('login') }}">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required />
+      </div>
+
+      <button type="submit" id="login-btn" class="btn btn-primary btn-full">Sign In</button>
+    </form>
+
+    <p class="link-text mt-2">
+      Don't have an account? <a href="{{ url_for('register') }}">Create one</a>
+    </p>
+
+    <div class="admin-divider">
+      <span>or</span>
+    </div>
+
+    <button type="button" id="admin-login-btn" class="btn btn-outline btn-full" onclick="adminLogin()">
+      🛡️ Login as Admin
+    </button>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function adminLogin() {
+    document.getElementById('username').value = 'admin';
+    document.getElementById('password').value = 'admin123';
+    document.querySelector('form').submit();
+  }
+</script>
+{% endblock %}

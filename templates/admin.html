@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — RentWheels{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <h1 class="page-title fade-in-up">Admin Dashboard</h1>
+  <p class="page-subtitle fade-in-up fade-in-up-delay-1">Manage your fleet — add, view, and remove vehicles.</p>
+
+  <div class="admin-grid">
+
+    <!-- ===== Add Vehicle Form ===== -->
+    <div class="glass-card no-hover fade-in-up fade-in-up-delay-2">
+      <h3 style="margin-bottom:1.2rem;">➕ Add New Vehicle</h3>
+      <form method="POST" action="{{ url_for('admin_dashboard') }}">
+        <div class="form-group">
+          <label for="vehicle_type">Vehicle Type</label>
+          <select id="vehicle_type" name="vehicle_type" class="form-control" required>
+            <option value="">Select type</option>
+            <option value="2-Wheeler">2-Wheeler</option>
+            <option value="4-Wheeler">4-Wheeler</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category" name="category" class="form-control" required>
+            <option value="">Select type first</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="brand">Brand</label>
+          <input type="text" id="brand" name="brand" class="form-control" placeholder="e.g. Honda, Toyota" required />
+        </div>
+
+        <div class="form-group">
+          <label for="model">Model</label>
+          <input type="text" id="model" name="model" class="form-control" placeholder="e.g. Activa, Corolla" required />
+        </div>
+
+        <div class="form-group">
+          <label for="price_per_day">Price per Day (₹)</label>
+          <input type="number" id="price_per_day" name="price_per_day" class="form-control" placeholder="500" min="1" required />
+        </div>
+
+        <div class="form-group">
+          <label for="image_url">Image URL</label>
+          <input type="url" id="image_url" name="image_url" class="form-control" placeholder="https://..." />
+        </div>
+
+        <button type="submit" id="add-vehicle-btn" class="btn btn-primary btn-full">Add Vehicle</button>
+      </form>
+    </div>
+
+    <!-- ===== Vehicle Inventory ===== -->
+    <div class="glass-card no-hover fade-in-up fade-in-up-delay-3">
+      <h3 style="margin-bottom:1.2rem;">🚘 Vehicle Inventory ({{ vehicles|length }})</h3>
+
+      {% if vehicles %}
+        <div class="vehicle-table-wrap">
+          <table class="vehicle-table">
+            <thead>
+              <tr>
+                <th>Brand / Model</th>
+                <th>Type</th>
+                <th>Category</th>
+                <th>₹/Day</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for v in vehicles %}
+              <tr>
+                <td><strong>{{ v.brand }}</strong> {{ v.model }}</td>
+                <td>
+                  <span class="badge {{ 'badge-2w' if v.vehicle_type == '2-Wheeler' else 'badge-4w' }}">
+                    {{ v.vehicle_type }}
+                  </span>
+                </td>
+                <td>{{ v.category }}</td>
+                <td>₹{{ v.price_per_day }}</td>
+                <td>
+                  {% if v.available %}
+                    <span style="color:var(--accent-success);">● Available</span>
+                  {% else %}
+                    <span style="color:var(--accent-danger);">● Booked</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="{{ url_for('delete_vehicle', vehicle_id=v.vehicle_id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this vehicle?')">Delete</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-icon">🏎️</div>
+          <p>No vehicles added yet. Use the form to add your first vehicle.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const categoryMap = {
+    '2-Wheeler': ['Gear', 'Without Gear'],
+    '4-Wheeler': ['Automatic', 'Manual', 'Semi-Automatic']
+  };
+
+  const typeSelect = document.getElementById('vehicle_type');
+  const catSelect = document.getElementById('category');
+
+  typeSelect.addEventListener('change', function() {
+    const cats = categoryMap[this.value] || [];
+    catSelect.innerHTML = '<option value="">Select category</option>';
+    cats.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      catSelect.appendChild(opt);
+    });
+  });
+</script>
+{% endblock %}
