@@ -2,54 +2,109 @@
 {% block title %}Login — RentWheels{% endblock %}
 
 {% block content %}
-<div class="auth-wrapper">
-  <div class="glass-card auth-card no-hover fade-in-up">
-    <div class="auth-logo" id="auth-logo">🔐</div>
-    <h2 id="auth-heading">Welcome Back</h2>
-    <p class="auth-sub" id="auth-sub">Sign in to your RentWheels account</p>
+<div class="login-split">
 
-    <!-- User Login Form -->
-    <form method="POST" action="{{ url_for('login') }}" id="user-form">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required />
+  <!-- ===== Left: Brand & Description ===== -->
+  <div class="login-hero">
+    <div class="login-hero-content fade-in-up">
+      <div class="hero-brand">🚗 RentWheels</div>
+      <h1>Your Ride,<br/><span class="gradient-text">Your Rules.</span></h1>
+      <p class="hero-desc">
+        RentWheels is a premium vehicle rental platform that connects riders with the perfect set of wheels — from zippy 2-wheelers to luxurious 4-wheelers.
+      </p>
+
+      <div class="hero-steps">
+        <div class="step-item fade-in-up fade-in-up-delay-1">
+          <div class="step-icon">📋</div>
+          <div>
+            <strong>Register & Browse</strong>
+            <p>Create an account and explore our fleet of available vehicles.</p>
+          </div>
+        </div>
+        <div class="step-item fade-in-up fade-in-up-delay-2">
+          <div class="step-icon">📅</div>
+          <div>
+            <strong>Pick Dates & Book</strong>
+            <p>Select your rental dates and book your preferred vehicle instantly.</p>
+          </div>
+        </div>
+        <div class="step-item fade-in-up fade-in-up-delay-3">
+          <div class="step-icon">💳</div>
+          <div>
+            <strong>Pay & Get Your Ticket</strong>
+            <p>Complete payment and receive a printable confirmation ticket.</p>
+          </div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required />
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-num">2</span>
+          <span class="stat-label">Vehicle Types</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">5</span>
+          <span class="stat-label">Categories</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">24/7</span>
+          <span class="stat-label">Booking</span>
+        </div>
       </div>
-
-      <button type="submit" id="login-btn" class="btn btn-primary btn-full">Sign In</button>
-    </form>
-
-    <p class="link-text mt-2" id="register-link">
-      Don't have an account? <a href="{{ url_for('register') }}">Create one</a>
-    </p>
-
-    <!-- Admin Login Form (hidden by default) -->
-    <form method="POST" action="{{ url_for('login') }}" id="admin-form" style="display:none;">
-      <div class="form-group">
-        <label for="admin_username">Admin Username</label>
-        <input type="text" id="admin_username" name="username" class="form-control" placeholder="Enter admin username" required />
-      </div>
-
-      <div class="form-group">
-        <label for="admin_password">Admin Password</label>
-        <input type="password" id="admin_password" name="password" class="form-control" placeholder="Enter admin password" required />
-      </div>
-
-      <button type="submit" id="admin-submit-btn" class="btn btn-primary btn-full">Sign In as Admin</button>
-    </form>
-
-    <div class="admin-divider">
-      <span>or</span>
     </div>
-
-    <button type="button" id="toggle-btn" class="btn btn-outline btn-full" onclick="toggleLogin()">
-      🛡️ Login as Admin
-    </button>
   </div>
+
+  <!-- ===== Right: Login Form ===== -->
+  <div class="login-form-side">
+    <div class="glass-card auth-card no-hover fade-in-up">
+      <div class="auth-logo" id="auth-logo">🔐</div>
+      <h2 id="auth-heading">Welcome Back</h2>
+      <p class="auth-sub" id="auth-sub">Sign in to your RentWheels account</p>
+
+      <!-- User Login Form -->
+      <form method="POST" action="{{ url_for('login') }}" id="user-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required />
+        </div>
+
+        <button type="submit" id="login-btn" class="btn btn-primary btn-full">Sign In</button>
+      </form>
+
+      <p class="link-text mt-2" id="register-link">
+        Don't have an account? <a href="{{ url_for('register') }}">Create one</a>
+      </p>
+
+      <!-- Admin Login Form (hidden by default) -->
+      <form method="POST" action="{{ url_for('login') }}" id="admin-form" style="display:none;">
+        <div class="form-group">
+          <label for="admin_username">Admin Username</label>
+          <input type="text" id="admin_username" name="username" class="form-control" placeholder="Enter admin username" required />
+        </div>
+
+        <div class="form-group">
+          <label for="admin_password">Admin Password</label>
+          <input type="password" id="admin_password" name="password" class="form-control" placeholder="Enter admin password" required />
+        </div>
+
+        <button type="submit" id="admin-submit-btn" class="btn btn-primary btn-full">Sign In as Admin</button>
+      </form>
+
+      <div class="admin-divider">
+        <span>or</span>
+      </div>
+
+      <button type="button" id="toggle-btn" class="btn btn-outline btn-full" onclick="toggleLogin()">
+        🛡️ Login as Admin
+      </button>
+    </div>
+  </div>
+
 </div>
 {% endblock %}
 
